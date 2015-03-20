@@ -27,6 +27,7 @@ libc_bionic_src_files_mips += \
     bionic/__memset_chk.cpp \
     bionic/__strcpy_chk.cpp \
     bionic/__strcat_chk.cpp \
+    bionic/strcat.c \
     bionic/memchr.c \
     bionic/memcmp.c \
     bionic/memmove.c \
@@ -49,7 +50,6 @@ libc_openbsd_src_files_mips += \
     upstream-openbsd/lib/libc/string/bcopy.c \
     upstream-openbsd/lib/libc/string/stpcpy.c \
     upstream-openbsd/lib/libc/string/stpncpy.c \
-    upstream-openbsd/lib/libc/string/strcat.c \
     upstream-openbsd/lib/libc/string/strcmp.c \
     upstream-openbsd/lib/libc/string/strcpy.c \
     upstream-openbsd/lib/libc/string/strlcat.c \

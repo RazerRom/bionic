@@ -1,7 +1,5 @@
-/*	$OpenBSD: strcat.c,v 1.9 2014/06/10 04:17:37 deraadt Exp $	*/
-
 /*
- * Copyright (c) 1988 Regents of the University of California.
+ * Copyright (c) 2015 Linaro Ltd.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -39,9 +37,6 @@ __warn_references(strcat,
 char *
 strcat(char *s, const char *append)
 {
-	char *save = s;
-
-	for (; *s; ++s);
-	while ((*s++ = *append++) != '\0');
-	return(save);
+	strcpy(s+strlen(s), append);
+	return s;
 }
