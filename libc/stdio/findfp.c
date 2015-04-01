@@ -169,6 +169,7 @@ _cleanup(void)
 void
 __sinit(void)
 {
+	size_t i;
 	_THREAD_PRIVATE_MUTEX(__sinit_mutex);
 
 	_THREAD_PRIVATE_MUTEX_LOCK(__sinit_mutex);
@@ -179,11 +180,11 @@ __sinit(void)
 	}
 
 	/* Initialize stdin/stdout/stderr (for the recursive mutex). http://b/18208568. */
-	for (size_t i = 0; i < 3; ++i) {
+	for (i = 0; i < 3; ++i) {
 		_FILEEXT_SETUP(__sF+i, __sFext+i);
 	}
 	/* Initialize the pre-allocated (but initially unused) streams. */
-	for (size_t i = 0; i < FOPEN_MAX - 3; ++i) {
+	for (i = 0; i < FOPEN_MAX - 3; ++i) {
 		_FILEEXT_SETUP(usual+i, usualext+i);
 	}
 
