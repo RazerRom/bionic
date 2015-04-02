@@ -70,18 +70,15 @@ libc_arch_dynamic_src_files_arm := arch-arm/bionic/exidx_dynamic.c
 ifeq ($(strip $(TARGET_$(my_2nd_arch_prefix)CPU_VARIANT)),)
   $(warning TARGET_$(my_2nd_arch_prefix)ARCH is arm, but TARGET_$(my_2nd_arch_prefix)CPU_VARIANT is not defined)
 endif
-ifneq ($(strip $(TARGET_$(my_2nd_arch_prefix)CPU_VARIANT)),krait)
-ifneq ($(strip $(TARGET_$(my_2nd_arch_prefix)CPU_VARIANT)),scorpion)
-ifneq ($(strip $(TARGET_$(my_2nd_arch_prefix)CPU_VARIANT)),cortex-a53)
-ifneq ($(strip $(TARGET_$(my_2nd_arch_prefix)CPU_VARIANT)),cortex-a9)
-ifneq ($(strip $(TARGET_$(my_2nd_arch_prefix)CPU_VARIANT)),denver)
+
+ifeq ($(filter cortex-a9 cortex-a53 denver krait scorpion, $(strip $(TARGET_$(my_2nd_arch_prefix)CPU_VARIANT))),)
 libc_bionic_src_files_arm += \
-    upstream-openbsd/lib/libc/string/stpcpy.c \
+    upstream-openbsd/lib/libc/string/stpcpy.c
+endif
+
+ifeq ($(filter cortex-a53 denver krait scorpion, $(strip $(TARGET_$(my_2nd_arch_prefix)CPU_VARIANT))),)
+libc_bionic_src_files_arm += \
     upstream-openbsd/lib/libc/string/bcopy.c
-endif
-endif
-endif
-endif
 endif
 
 ifeq ($(TARGET_BOARD_PLATFORM),exynos4)
