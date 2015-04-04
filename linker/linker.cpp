@@ -2377,7 +2377,6 @@ static ElfW(Addr) __linker_init_post_relocation(KernelArgumentBlock& args, ElfW(
   _r_debug.r_map = map;
   r_debug_tail = map;
 
-<<<<<<< HEAD
   init_linker_info_for_gdb(linker_base);
 
   // Extract information passed from the kernel.
@@ -2401,15 +2400,6 @@ static ElfW(Addr) __linker_init_post_relocation(KernelArgumentBlock& args, ElfW(
   }
   si->dynamic = nullptr;
   si->ref_count = 1;
-=======
-#ifndef ENABLE_NON_PIE_SUPPORT
-    ElfW(Ehdr)* elf_hdr = reinterpret_cast<ElfW(Ehdr)*>(si->base);
-    if (elf_hdr->e_type != ET_DYN) {
-        __libc_format_fd(2, "error: only position independent executables (PIE) are supported.\n");
-        exit(EXIT_FAILURE);
-    }
-#endif
->>>>>>> 6b62242... Revert "Revert "Reenable support for non-PIE executables""
 
   ElfW(Ehdr)* elf_hdr = reinterpret_cast<ElfW(Ehdr)*>(si->base);
   if (elf_hdr->e_type != ET_DYN) {
