@@ -38,7 +38,7 @@ libc_bionic_src_files_x86 += \
     upstream-freebsd/lib/libc/string/wcscat.c \
     upstream-openbsd/lib/libc/string/strlcat.c \
     upstream-openbsd/lib/libc/string/strlcpy.c \
-    upstream-openbsd/lib/libc/string/strncat.c
+    bionic/strncat.c
 endif
 
 ifeq ($(ARCH_X86_HAVE_SSE4),true)
