@@ -23,6 +23,7 @@ libc_openbsd_src_files_arm += \
 #
 
 libc_bionic_src_files_arm += \
+    bionic/memchr.c \
     bionic/memrchr.c \
     bionic/strchr.cpp \
     bionic/strnlen.c \
