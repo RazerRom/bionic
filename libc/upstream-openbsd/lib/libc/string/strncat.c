@@ -1,6 +1,10 @@
-/*
- * Copyright (c) 2015 Linaro Ltd.
+/*	$OpenBSD: strncat.c,v 1.5 2005/08/08 08:05:37 espie Exp $ */
+/*-
+ * Copyright (c) 1990 The Regents of the University of California.
  * All rights reserved.
+ *
+ * This code is derived from software contributed to Berkeley by
+ * Chris Torek.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,14 +33,25 @@
 
 #include <string.h>
 
-#if defined(APIWARN)
-__warn_references(strcat,
-    "warning: strcat() is almost always misused, please use strlcat()");
-#endif
-
+/*
+ * Concatenate src on the end of dst.  At most strlen(dst)+n+1 bytes
+ * are written at dst (at most n+1 bytes being appended).  Return dst.
+ */
 char *
-strcat(char *s, const char *append)
+strncat(char *dst, const char *src, size_t n)
 {
-	strcpy(s+strlen(s), append);
-	return s;
+	if (n != 0) {
+		char *d = dst;
+		const char *s = src;
+
+		while (*d != 0)
+			d++;
+		do {
+			if ((*d = *s++) == 0)
+				break;
+			d++;
+		} while (--n != 0);
+		*d = 0;
+	}
+	return (dst);
 }
