@@ -37,8 +37,6 @@
          * so we have to preserve R0.
          */
 
-         .syntax unified
-
 ENTRY(__memcpy_chk)
         cmp         r2, r3
         bhi         __memcpy_chk_fail
@@ -83,12 +81,12 @@ ENTRY(memcpy)
          */
         movs        r12, r3, lsl #31
         sub         r2, r2, r3      /* we know that r3 <= r2 because r2 >= 4 */
-        ldrbmi      r3, [r1], #1
-        ldrbcs      r4, [r1], #1
-        ldrbcs      r12,[r1], #1
-        strbmi      r3, [r0], #1
-        strbcs      r4, [r0], #1
-        strbcs      r12,[r0], #1
+        ldrmib      r3, [r1], #1
+        ldrcsb      r4, [r1], #1
+        ldrcsb      r12,[r1], #1
+        strmib      r3, [r0], #1
+        strcsb      r4, [r0], #1
+        strcsb      r12,[r0], #1
 
 .Lsrc_aligned:
 
@@ -111,10 +109,10 @@ ENTRY(memcpy)
 
         /* conditionally copies 0 to 7 words (length in r3) */
         movs        r12, r3, lsl #28
-        ldmcs       r1!, {r4, r5, r6, r7}   /* 16 bytes */
-        ldmmi       r1!, {r8, r9}           /*  8 bytes */
-        stmcs       r0!, {r4, r5, r6, r7}
-        stmmi       r0!, {r8, r9}
+        ldmcsia     r1!, {r4, r5, r6, r7}   /* 16 bytes */
+        ldmmiia     r1!, {r8, r9}           /*  8 bytes */
+        stmcsia     r0!, {r4, r5, r6, r7}
+        stmmiia     r0!, {r8, r9}
         tst         r3, #0x4
         ldrne       r10,[r1], #4            /*  4 bytes */
         strne       r10,[r0], #4
@@ -179,18 +177,18 @@ ENTRY(memcpy)
 
         /* conditionnaly copies 0 to 31 bytes */
         movs        r12, r2, lsl #28
-        ldmcs       r1!, {r4, r5, r6, r7}   /* 16 bytes */
-        ldmmi       r1!, {r8, r9}           /*  8 bytes */
-        stmcs       r0!, {r4, r5, r6, r7}
-        stmmi       r0!, {r8, r9}
+        ldmcsia     r1!, {r4, r5, r6, r7}   /* 16 bytes */
+        ldmmiia     r1!, {r8, r9}           /*  8 bytes */
+        stmcsia     r0!, {r4, r5, r6, r7}
+        stmmiia     r0!, {r8, r9}
         movs        r12, r2, lsl #30
         ldrcs       r3, [r1], #4            /*  4 bytes */
-        ldrhmi      r4, [r1], #2            /*  2 bytes */
+        ldrmih      r4, [r1], #2            /*  2 bytes */
         strcs       r3, [r0], #4
-        strhmi      r4, [r0], #2
+        strmih      r4, [r0], #2
         tst         r2, #0x1
-        ldrbne      r3, [r1]                /*  last byte  */
-        strbne      r3, [r0]
+        ldrneb      r3, [r1]                /*  last byte  */
+        strneb      r3, [r0]
 
         /* we're done! restore everything and return */
 1:      ldmfd       sp!, {r5-r11}
@@ -230,11 +228,11 @@ ENTRY(memcpy)
          * becomes aligned to 32 bits (r5 = nb of words to copy for alignment)
          */
         movs        r5, r5, lsl #31
-        strbmi      r3, [r0], #1
+        strmib      r3, [r0], #1
         movmi       r3, r3, lsr #8
-        strbcs      r3, [r0], #1
+        strcsb      r3, [r0], #1
         movcs       r3, r3, lsr #8
-        strbcs      r3, [r0], #1
+        strcsb      r3, [r0], #1
         movcs       r3, r3, lsr #8
 
         cmp         r2, #4
@@ -365,23 +363,23 @@ ENTRY(memcpy)
 .Lpartial_word_tail:
         /* we have a partial word in the input buffer */
         movs        r5, lr, lsl #(31-3)
-        strbmi      r3, [r0], #1
+        strmib      r3, [r0], #1
         movmi       r3, r3, lsr #8
-        strbcs      r3, [r0], #1
+        strcsb      r3, [r0], #1
         movcs       r3, r3, lsr #8
-        strbcs      r3, [r0], #1
+        strcsb      r3, [r0], #1
 
         /* Refill spilled registers from the stack. Don't update sp. */
         ldmfd       sp, {r5-r11}
 
 .Lcopy_last_3_and_return:
         movs        r2, r2, lsl #31 /* copy remaining 0, 1, 2 or 3 bytes */
-        ldrbmi      r2, [r1], #1
-        ldrbcs      r3, [r1], #1
-        ldrbcs      r12,[r1]
-        strbmi      r2, [r0], #1
-        strbcs      r3, [r0], #1
-        strbcs      r12,[r0]
+        ldrmib      r2, [r1], #1
+        ldrcsb      r3, [r1], #1
+        ldrcsb      r12,[r1]
+        strmib      r2, [r0], #1
+        strcsb      r3, [r0], #1
+        strcsb      r12,[r0]
 
         /* we're done! restore sp and spilled registers and return */
         add         sp,  sp, #28
