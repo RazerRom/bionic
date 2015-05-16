@@ -833,84 +833,9 @@ LOCAL_MODULE := libc_bionic
 LOCAL_CLANG := $(use_clang)
 LOCAL_ADDITIONAL_DEPENDENCIES := $(libc_common_additional_dependencies)
 LOCAL_SYSTEM_SHARED_LIBRARIES :=
-LOCAL_ADDRESS_SANITIZER := false
-LOCAL_NATIVE_COVERAGE := $(bionic_coverage)
-
-$(eval $(call patch-up-arch-specific-flags,LOCAL_CFLAGS,libc_common_cflags))
-include $(BUILD_STATIC_LIBRARY)
-
-
-# ========================================================
-# libc_bionic_ndk.a - The portions of libc_bionic that can
-# be safely used in libc_ndk.a (no troublesome global data
-# or constructors).
-# ========================================================
-
-include $(CLEAR_VARS)
-
-LOCAL_SRC_FILES := $(libc_bionic_ndk_src_files)
-LOCAL_CFLAGS := $(libc_common_cflags) \
-    -Wframe-larger-than=2048 \
-
-LOCAL_CONLYFLAGS := $(libc_common_conlyflags)
-LOCAL_CPPFLAGS := $(libc_common_cppflags) -Wold-style-cast
-LOCAL_C_INCLUDES := $(libc_common_c_includes) bionic/libstdc++/include
-LOCAL_MODULE := libc_bionic_ndk
-LOCAL_CLANG := $(use_clang)
-LOCAL_ADDITIONAL_DEPENDENCIES := $(libc_common_additional_dependencies)
-LOCAL_CXX_STL := none
-LOCAL_SYSTEM_SHARED_LIBRARIES :=
-LOCAL_ADDRESS_SANITIZER := false
-LOCAL_NATIVE_COVERAGE := $(bionic_coverage)
 
 $(eval $(call patch-up-arch-specific-flags,LOCAL_CFLAGS,libc_common_cflags))
 $(eval $(call patch-up-arch-specific-flags,LOCAL_SRC_FILES,libc_bionic_src_files))
-include $(BUILD_STATIC_LIBRARY)
-
-include $(CLEAR_VARS)
-LOCAL_SRC_FILES := $(libc_thread_atexit_impl_src_files)
-LOCAL_CFLAGS := $(libc_common_cflags) -Wframe-larger-than=2048
-
-LOCAL_CONLYFLAGS := $(libc_common_conlyflags)
-LOCAL_CPPFLAGS := $(libc_common_cppflags) -Wold-style-cast
-LOCAL_C_INCLUDES := $(libc_common_c_includes)
-LOCAL_MODULE := libc_thread_atexit_impl
-# TODO: Clang tries to use __tls_get_addr which is not supported yet
-# remove after it is implemented.
-LOCAL_CLANG := false
-LOCAL_ADDITIONAL_DEPENDENCIES := $(libc_common_additional_dependencies)
-LOCAL_CXX_STL := none
-LOCAL_SYSTEM_SHARED_LIBRARIES :=
-LOCAL_ADDRESS_SANITIZER := false
-LOCAL_NATIVE_COVERAGE := $(bionic_coverage)
-
-include $(BUILD_STATIC_LIBRARY)
-
-# ========================================================
-# libc_pthread.a - pthreads parts that previously lived in
-# libc_bionic.a. Relocated to their own library because
-# they can't be included in libc_ndk.a (as they layout of
-# pthread_t has changed over the years and has ABI
-# compatibility issues).
-# ========================================================
-
-include $(CLEAR_VARS)
-
-LOCAL_SRC_FILES := $(libc_pthread_src_files)
-LOCAL_CFLAGS := $(libc_common_cflags) \
-    -Wframe-larger-than=2048 \
-
-LOCAL_CONLYFLAGS := $(libc_common_conlyflags)
-LOCAL_CPPFLAGS := $(libc_common_cppflags) -Wold-style-cast
-LOCAL_C_INCLUDES := $(libc_common_c_includes)
-LOCAL_MODULE := libc_pthread
-LOCAL_CLANG := $(use_clang)
-LOCAL_ADDITIONAL_DEPENDENCIES := $(libc_common_additional_dependencies)
-LOCAL_CXX_STL := none
-LOCAL_SYSTEM_SHARED_LIBRARIES :=
-LOCAL_ADDRESS_SANITIZER := false
-LOCAL_NATIVE_COVERAGE := $(bionic_coverage)
-
 include $(BUILD_STATIC_LIBRARY)
 
 
