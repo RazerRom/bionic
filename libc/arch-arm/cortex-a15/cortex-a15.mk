@@ -17,5 +17,5 @@ libc_bionic_src_files_arm += \
     arch-arm/cortex-a7/bionic/memcpy.S
 else
 libc_bionic_src_files_arm += \
-    arch-arm/bionic/memchr.v7a.S
+    arch-arm/cortex-a15/bionic/memcpy.S
 endif
